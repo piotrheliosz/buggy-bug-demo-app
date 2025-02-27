@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run docker compose
+      - name: Run docker-compose
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           services: |
@@ -23,5 +23,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests
+      - name: Run Tests
         run: mvn test
+
+      - name: Publish Tests Report
+        uses: mikepenz/action-junit-report@v5
+        if: success() || failure()
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
